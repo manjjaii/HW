@@ -47,7 +47,87 @@ int main() {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //도전 기능 가이드
+
+#include <iostream>
+
+using namespace std;
+
+void bubbleSort(int arr[], int size, int order) {//void를 붙여 정렬된 결과를 반환하지 않고 arr[]배열에 저장한다. 배열과 배열의 크기를 대입한다.
+
+	for (int i = 0; i < size- 1; i++) {//for문을 사용하여 한번 반복마다 가장 큰값이 배열의 맨뒤로 물러나게 하여 size-1번의 반복만 하면된다.
+		for (int j = 0; j < size-i - 1; j++) {//외부 for문을 사용하여 배열의 크기-1만큼을 반복한다.
+			if (order == 1 && arr[j] > arr[j + 1]) {     //1과2중 1을 입력하는 조건과 내부에서 if문을 사용하여 배열의 두 인접한 값을 비교하여 앞의 값이 더 큰 조건이 둘다 성립하면	                                  
+				swap(arr[j], arr[j + 1]);//swap함수를 사용하여 결과는 j와j+1의 자리가 바뀐다.
+			}
+
+			else if (order == 2 && arr[j] < arr[j + 1]) {//2를 입력하는 조건과 인접한 두 값을 비교하여 앞이 뒤보다 더 작으면 swap을 이용하여 자리가 바뀐다.
+				swap(arr[j], arr[j + 1]);
+			}
+		}
+	}
+}
+
+int main() {
+	int size;
+	cout << "정렬할 숫자의 개수를 입력하세요: ";//배열에 들어갈 정수의 숫자의 크기를 정한다.
+	cin >> size;
+
+	//동적 배열을 생성한다. 사용자로부터 배열의 크기를 입력받기 때문에, 컴파일시점에 배열 크기를 알 수 없어서 동적 할당을 통해 메모리를 확보한다.
+	int* arr = new int[size];
+
+	//배열의 요소를 입력받는다.
+	cout << size << "개의 정수를 입력하세요: ";
+	for (int i = 0; i < size; i++) {
+		cin >> arr[i];
+	}//size개의 정수를 입력하라고 안내후에 for문을 통해 arr[i] 배열에 size만큼의 갯수를 입력한다. 그러면 size개의 숫자가 arr배열에 차례대로 저장된다.
+
+	int order;
+
+	while (true) {
+		cout << "정렬 방식 선택(1: 오름차순, 2:내림차순): ";
+		cin >> order;
+
+		if (order == 1 || order == 2) {
+			break;
+		}
+		else {
+			cout << "잘못된 입력입니다. 1 또는 2중 입력하세요." << endl;
+		}
+
+	}
+
+
+	//버블정렬을 실행시킨다.
+	bubbleSort(arr, size, order);
+
+	//정렬 결과를 출력시킨다.
+	cout << "정렬 결과: ";
+	for (int i = 0; i < size; i++) {
+		cout << arr[i] << " ";
+	}
+	cout << endl;
+	//동적 메모리를 delete로 해제시킨다.
+	delete[] arr;
+
+	return 0;
+}//메인함수를 닫는다.
 
 
 
