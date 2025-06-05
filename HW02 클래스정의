@@ -111,15 +111,14 @@ public:
             delete animals[i]; // 동적 할당된 Animal 객체 메모리 해제
         }
     }
-};
-
-
-
-
-//도전 문제
-.
-.
-.
+}
+//도전 2번문제 랜덤함수 
+Animal* createRandomAnimal() {
+    int r = rand() % 3;
+    if (r == 0) return new Dog();
+    else if (r == 1) return new Cat();
+    else return new Cow();
+}
 
 
 
