@@ -68,3 +68,60 @@ int main() {
 
 
 
+//도전 기능 문제
+#include <iostream>
+
+using namespace std;
+
+
+class Animal {
+public:
+    virtual void makeSound() = 0;
+    virtual void move() = 0;//Animal 클래스에서 makesound()와 move()는 가상함수로 정의 되어야 다형성을 통해 실제 객체의 동작이 호출가능
+    virtual ~Animal() {}
+};
+
+class Zoo {
+private:
+    Animal* animals[10]; // 동물 객체를 저장하는 포인터 배열, 동물 객체는 animal*형태로 저장되었다.
+    int count = 0;        // 현재 저장된 동물의 수 
+
+public:
+    // 동물을 동물원에 추가하는 함수 addAnimal
+    void addAnimal(Animal* animal) {
+        if (count < 10) {
+            animals[count++] = animal;//count의 값을 증가시켜 animal배열의 다음 자리에 저장
+        }
+        else {//자리가 다 차면 더 저장할 수 없다는 안내문구 출력
+            cout << "동물원에 더 이상 동물을 추가할 수 없습니다." << endl;
+        }
+    }
+
+    // 모든 동물의 행동 수행 함수
+    void performActions() {
+        for (int i = 0; i < count; i++) {//반복문을 통해 모든 동물들이 순차적으로 소리를 내고 움직이는 동작을 실행한다
+            animals[i]->makeSound();
+            animals[i]->move();
+        }
+    }
+
+    // 소멸자
+    ~Zoo() {
+        for (int i = 0; i < count; i++) {
+            delete animals[i]; // 동적 할당된 Animal 객체 메모리 해제
+        }
+    }
+};
+
+
+
+
+//2번 문제
+.
+.
+.
+
+
+
+
+
