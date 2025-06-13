@@ -1,0 +1,177 @@
+//필수과제
+
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class Book//book클래스를 정의한다
+{
+public:
+    string title;
+    string author;
+    //멤버 변수 title과 author를 선언한다.
+
+    Book(const string& title, const string& author)
+        : title(title), author(author)//멤버 이니셜라이저 리스트. 클래스 안의 멤버 변수 title과 author를 전달받은 값으로 초기화시킨다.
+    {}//생성자에서 실행할 코드가 없기에 비워둔다.
+    //생성자로 title과 author를 초기화시킨다.
+};
+
+class BookManager//도서목록을 관리하는 클래스 선언한다
+{
+private:
+    vector<Book> books;//books는 book객체들을 담는 vector이다.
+
+
+public:
+    void addBook(const string& title, const string& author)//책을 축다하는 함수를 addBook이라고 선언한다
+    {
+        books.push_back(Book(title, author));//push_back을 통해 books에 book을 추가한다.
+        cout << "책이 추가되었습니다: " << title << " by " << author << endl;
+    }
+
+    void displayAllBooks() const
+    {
+        if (books.empty())//책 목록을 출력하는 함수인데 책이 없을경우 메시지를 출력한다.
+        {
+            cout << "현재 등록된 책이 없습니다." << endl;
+            return;
+        }
+
+        cout << "현재 도서 목록:" << endl;//책이 있을 경우 책의 개수만큼 책을 출력한다.
+        for (size_t i = 0; i < books.size(); i++)
+        {
+            cout << "- " << books[i].title << " by " << books[i].author << endl;
+        }
+    }
+
+    void searchByTitle(const string& title)//책을 제목으로 찾는 함수이다. 
+    {
+        for (Book& book : books)//books 벡터에 있는 모든 book들을 하나씩 반복한다.
+        {
+            if (title == book.title)//책 제목과 일치하는 book이 있으면 출력후 함수를 끝낸다.
+            {
+                cout << "책 제목: " << title << "을(를) 찾았습니다." << endl;
+                return;
+            }
+        }
+        //책 제목과 동일한 책이 없으면 아래 문구를 출력한다.
+        cout << title << "라는 책을 찾지 못했습니다." << endl;
+    }
+
+    void searchByAuthor(const string& author)//작가로 찾는 함수
+    {
+        for (Book& book : books)//마찬가지로 book 전체를 반복한다
+        {
+            if (author == book.author)//작가명을 가진 작가 책이 있으면 출력후 함수를 끝낸다
+            {
+                cout << "책 제목: " << book.title << "을(를) 찾았습니다." << endl;
+                return;
+            }
+        }
+
+        cout << "저자 " << author << "의 책을 찾지 못했습니다." << endl;//없으면 입력한 author와 문구를 출력한다.
+    }
+
+    Book* findBookByTitle(const string& title)//title을 받아서 Book의 포인터를 반환한다.
+    {
+        for (Book& book : books)//books의 book들을 반복한다.
+        {
+            if (title == book.title)//같은 제목이 있다면 book의 주소값을 반환한다.
+            {
+                return &book;
+            }
+        }
+
+        return nullptr;//없다면 nullptr반환
+    }
+
+    Book* findBookByAuthor(const string& author)//마찬가지로 작가를 받아서 작가 포인터 반환
+    {
+        for (Book& book : books)//작가 반복
+        {
+            if (author == book.author)//작가 찾으면 작가 주소값 반환
+            {
+                return &book;
+            }
+        }
+
+        return nullptr;//없다면 nullptr
+    }
+};
+
+
+
+//도전과제 
+
+class BorrowManager//대여 클래스를 선언한다
+{
+private:
+    unordered_map<string, int> stock;//책 제목을 key, 재고수량을 정수값으로 value로 저장한다.
+
+public:
+    void initializeStock(const Book* book, int quantity = 3)//책을 등록하고, 책 재고를 기본 3권으로 등록한다.
+    {
+        if (nullptr == book)//책이 없으면 함수를 종료학고
+        {
+            return;
+        }
+
+        stock[book->title] = quantity;//book이 nullptr이 아니면 재고에 3권을 추가한다.
+        cout << "책이 추가되었습니다: " << book->title << " by " << book->author << endl;
+    }
+
+    void borrowBook(const string& title)//책 대여 함수를 선언한다.
+    {
+        if (stock.end() != stock.find(title))//책이 재고 목록에 있는지 확인한다.
+        {
+            if (0 < stock[title])
+            {
+                --stock[title];
+                cout << title << "을(를) 대여했습니다." << endl;
+            }//책이 1권 이상이면 대여하고 재고를 감소시킨다.
+
+            else
+            {
+                cout << "재고가 부족하여 " << title << "을(를) 대여하지 못했습니다." << endl;
+            }//책이 0권이면 대여 실패
+        }
+
+        else
+        {
+            cout << title << "이라는 책을 찾지 못했습니다." << endl;
+        }// find결과가  end()이면 책이 없으므로 책 찾지 못했다는 메시지 출력
+    }
+
+    void returnBook(const string& title)//책 반납 함수 선언
+    {
+        if (stock.end() != stock.find(title))//책이 있는지 확인한다.
+        {
+            if (3 > stock[title])
+            {
+                ++stock[title];
+                cout << title << "을(를) 반납했습니다." << endl;
+            }//책이 3권보다 적으면 반납후 재고를 증가시킨다.
+
+            else
+            {
+                cout << title << "을(를) 반납하지 못했습니다." << endl;
+            }//3권이면 반납 불가
+        }
+
+        else
+        {
+            cout << title << "이라는 책을 찾지 못했습니다." << endl;
+        }//없는 책이면 못 찾았다는 메시지 출력
+    }
+
+    void displayStock()//책의 전체 재고를 출력한다.
+    {
+        for (pair<const string, int> e : stock)
+        {
+            cout << "책 제목: " << e.first << "책 재고: " << e.second << endl;
+        }//pair를 e에 담아서 e에서 불러온다.
+};
